@@ -1,0 +1,121 @@
+% !TEX program = xelatex
+\documentclass[UTF8, a4paper, 11pt]{ctexart}
+
+% Page layout
+\usepackage{geometry}
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% Math and relational algebra symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% Tables, lists, colors, and links
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% Optional: code-like formatting for SQL fragments or relation schemas
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  columns=fullflexible,
+  keepspaces=true,
+  frame=single,
+  breaklines=true
+}
+
+% Header and footer
+\pagestyle{fancy}
+\setlength{\headheight}{13.6pt}
+\fancyhf{}
+\lhead{数据库导论}
+\chead{Homework 2}
+\rhead{关系代数}
+\cfoot{第 \thepage\ 页，共 \pageref{LastPage} 页}
+
+% Common relational algebra commands
+\newcommand{\ra}{\ensuremath{\mathcal{RA}}}
+\newcommand{\rel}[1]{\ensuremath{\mathsf{#1}}}
+\newcommand{\attr}[1]{\ensuremath{\mathit{#1}}}
+\newcommand{\schema}[2]{\ensuremath{\rel{#1}(#2)}}
+\newcommand{\pk}[1]{\underline{#1}}
+\newcommand{\fk}[1]{#1^{\ast}}
+
+\newcommand{\select}[2]{\ensuremath{\sigma_{#1}\!\left(#2\right)}}
+\newcommand{\project}[2]{\ensuremath{\pi_{#1}\!\left(#2\right)}}
+\newcommand{\rename}[2]{\ensuremath{\rho_{#1}\!\left(#2\right)}}
+\newcommand{\join}[3]{\ensuremath{#2 \mathbin{\bowtie_{#1}} #3}}
+\newcommand{\natjoin}[2]{\ensuremath{#1 \mathbin{\bowtie} #2}}
+\newcommand{\semijoin}[2]{\ensuremath{#1 \mathbin{\ltimes} #2}}
+\newcommand{\antijoin}[2]{\ensuremath{#1 \mathbin{\triangleright} #2}}
+\newcommand{\division}[2]{\ensuremath{#1 \div #2}}
+\newcommand{\assign}[2]{\ensuremath{#1 \leftarrow #2}}
+
+% Problem environment
+\newcounter{problem}
+\newenvironment{problem}[1][]{
+  \refstepcounter{problem}
+  \section*{题目 \theproblem\if\relax\detokenize{#1}\relax\else：#1\fi}
+  \addcontentsline{toc}{section}{题目 \theproblem}
+}{}
+
+\title{\textbf{《数据库概论》第二次课后作业}}
+\author{姓名：李云浩 \quad 学号：241880324}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{关系模型}
+
+本次作业使用的关系模型如下。带下划线的属性表示主键，带星号的属性表示外键。
+
+\[\begin{aligned}
+  \schema{E: employee}{\pk{person\_ name}, street, city} \\
+  \schema{W: works}{\pk{person\_ name}, \pk{company\_ name}, salary} \\
+  \schema{C: company}{\pk{company\_ name}, city} \\
+  \schema{M: manages}{\pk{person\_ name}, manager\_ name}
+\end{aligned}\]
+
+\section*{记号说明}
+本文使用的关系代数记号如下：
+\[
+\begin{array}{ll}
+  \select{\theta}{R} & \text{选择：从 } R \text{ 中选出满足条件 } \theta \text{ 的元组} \\
+  \project{A_1,\ldots,A_k}{R} & \text{投影：保留属性 } A_1,\ldots,A_k \\
+  \natjoin{R}{S} & \text{自然连接} \\
+  \join{\theta}{R}{S} & \text{条件连接} \\
+  R - S & \text{差运算} \\
+  R \cup S,\ R \cap S & \text{并、交运算} \\
+  \division{R}{S} & \text{除法运算}
+\end{array}
+\]
+
+\begin{problem}
+找出没有上级经理的员工信息。
+
+\[
+    \natjoin{(\project{person\_ name}{E} - \project{person\_ name}{M})}{E}
+\]
+\end{problem}
+
+\begin{problem}
+找出与其经理居住在同一城市同一街道的所有员工姓名。
+
+令 \( R = \join{}{\project{manager\_ name}{M}}{E}, \quad S = \join{}{\project{person\_ name}{M}}{E} \),
+\[
+    \project{person\_ name}{\join{M.person\_ name = S.person\_ name}{\join{R.manager\_ name = M.manager\_ name}{R}{M}}{S}}
+\]
+\end{problem}
+
+\begin{problem}
+    
+\end{problem}
+
+\end{document}
