@@ -83,19 +83,19 @@
   \schema{M: manages}{\pk{person\_ name}, manager\_ name}
 \end{aligned}\]
 
-\section*{记号说明}
-本文使用的关系代数记号如下：
-\[
-\begin{array}{ll}
-  \select{\theta}{R} & \text{选择：从 } R \text{ 中选出满足条件 } \theta \text{ 的元组} \\
-  \project{A_1,\ldots,A_k}{R} & \text{投影：保留属性 } A_1,\ldots,A_k \\
-  \natjoin{R}{S} & \text{自然连接} \\
-  \join{\theta}{R}{S} & \text{条件连接} \\
-  R - S & \text{差运算} \\
-  R \cup S,\ R \cap S & \text{并、交运算} \\
-  \division{R}{S} & \text{除法运算}
-\end{array}
-\]
+% \section*{记号说明}
+% 本文使用的关系代数记号如下：
+% \[
+% \begin{array}{ll}
+%   \select{\theta}{R} & \text{选择：从 } R \text{ 中选出满足条件 } \theta \text{ 的元组} \\
+%   \project{A_1,\ldots,A_k}{R} & \text{投影：保留属性 } A_1,\ldots,A_k \\
+%   \natjoin{R}{S} & \text{自然连接} \\
+%   \join{\theta}{R}{S} & \text{条件连接} \\
+%   R - S & \text{差运算} \\
+%   R \cup S,\ R \cap S & \text{并、交运算} \\
+%   \division{R}{S} & \text{除法运算}
+% \end{array}
+% \]
 
 \begin{problem}
 找出没有上级经理的员工信息。
@@ -108,14 +108,55 @@
 \begin{problem}
 找出与其经理居住在同一城市同一街道的所有员工姓名。
 
-令 \( R = \join{}{\project{manager\_ name}{M}}{E}, \quad S = \join{}{\project{person\_ name}{M}}{E} \),
+令 \( R = \join{manager\_name = E.person\_name}{\project{manager\_ name, person\_name}{M}}{E}, \\ \quad S = \natjoin{\project{person\_ name}{M}}{E}, 
+\quad F = (R.street = S.street) \land (R.city = S.city)\)
+
 \[
-    \project{person\_ name}{\join{M.person\_ name = S.person\_ name}{\join{R.manager\_ name = M.manager\_ name}{R}{M}}{S}}
+    \project{S.person\_ name}{\select{F}{\join{R.person\_ name = S.person\_ name}{R}{S}}}
 \]
 \end{problem}
 
 \begin{problem}
-    
+找出不在 “First Bank Corp." 工作的所有员工的姓名。
+
+\[
+  \project{person\_name}{E} - \project{person\_ name}{\select{company\_ name = "First \ Bank \ Corp"}{W}}
+\]
+\end{problem}
+
+\begin{problem}
+找出比 "Small Bank Corp." 的所有员工收入都高的所有员工姓名。  
+
+令 \(R = \select{company\_ name = "Small \ Bank \ Corp"}{W}\)
+
+\[
+  \project{person\_ name}{W - R} - \project{person\_name}{\select{R.salary \geq (W-R).salary}{R \times (W - R)}}
+\]
+
+\end{problem}
+
+\begin{problem}
+找出管理超过两名员工（含两位）的经理姓名。
+
+令 \(M_1 := M, M_2 := M\) 
+
+\(F = (M_1.manager\_name = M_2.manager\_name) \land (M_1.person\_name \neq M_2.person\_name)\)
+
+\[
+\project{M_1.manager\_name}{\select{F}{\join{M_1.manager\_name = M_2.manager\_name}{M_1}{M_2}}}
+\]
+
+
+\end{problem}
+
+\begin{problem}
+找出在南京所有公司工作过的员工姓名。
+
+\[
+{\division{\project{person\_name, company\_name}{W}}{\project{company\_name}{\select{city = "NanJing"}{C}}}}
+\]
+
+
 \end{problem}
 
 \end{document}

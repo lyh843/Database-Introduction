@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.25)  25 APR 2026 12:21
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.25)  25 APR 2026 18:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -666,7 +666,12 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 74.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-] [2] 
+]
+Overfull \hbox (11.32784pt too wide) in paragraph at lines 143--144
+[]$\OML/cmm/m/it/10.95 F \OT1/cmr/m/n/10.95 = (\OML/cmm/m/it/10.95 M[]:manager[]name \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 M[]:manager[]name\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 ^ \OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 M[]:person[]name \OMS/cmsy/m/n/10.95 6\OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 M[]:person[]name\OT1/cmr/m/n/10.95 )$ 
+ []
+
+[2] 
 enddocument/afterlastpage: lastpage setting LastPage.
 (./hw2.aux)
  ***********
@@ -683,16 +688,16 @@ Package rerunfilecheck Warning: File `hw2.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `hw2.out':
-(rerunfilecheck)             Before: AA696712DA22451E8065DF10FB29C898;146
-(rerunfilecheck)             After:  46E469B0CAE8F3008859051B27651393;219.
+(rerunfilecheck)             Before: E0C7C4D1A614D00256240A49737EDF05;438
+(rerunfilecheck)             After:  F7425E30B95C1B0BCBB0F8726707124C;438.
  ) 
 Here is how much of TeX's memory you used:
- 19241 strings out of 476443
- 405383 string characters out of 5793962
- 1935627 words of memory out of 5000000
- 40923 multiletter control sequences out of 15000+600000
- 566464 words of font info for 88 fonts, out of 8000000 for 9000
+ 19197 strings out of 476443
+ 402575 string characters out of 5793962
+ 1933627 words of memory out of 5000000
+ 40881 multiletter control sequences out of 15000+600000
+ 566448 words of font info for 86 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
- 93i,11n,97p,1231b,344s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 93i,11n,97p,1231b,411s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on hw2.pdf (2 pages).
