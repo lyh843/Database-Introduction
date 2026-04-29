@@ -1,24 +1,4 @@
 {
-<<<<<<< HEAD
-    "sqltools.connections": [
-        {
-            "mysqlOptions": {
-                "authProtocol": "default",
-                "enableSsl": "Disabled"
-            },
-            "ssh": "Disabled",
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "class",
-            "database": "book3.3",
-            "username": "li",
-            "askForPassword": true
-        }
-    ]
-}
-=======
   "latex-workshop.latex.recipe.default": "latexmk (xelatex)",
   "latex-workshop.latex.recipes": [
     {
@@ -52,11 +32,10 @@
       "server": "localhost",
       "port": 3306,
       "driver": "MySQL",
-      "name": "vscode",
-      "database": "class",
+      "name": "local-mysql",
+      "database": "ST",
       "username": "root",
       "askForPassword": true
     }
   ]
 }
->>>>>>> refs/remotes/origin/main

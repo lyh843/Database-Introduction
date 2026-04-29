@@ -132,3 +132,25 @@ SELECT FIRST.Cno, SECOND.Cpno
 FROM ST.Course FIRST, ST.Course SECOND
 where FIRST.Cpno=SECOND.Cno;
 
+SELECT Student.Sno, Sname, Ssex, Sage, Sdept, Cno, Grade
+FROM ST.Student LEFT OUTER JOIN ST.SC ON (Student.Sno = SC.Sno);
+
+SELECT Sname
+FROM ST.Student
+WHERE Sno IN(
+    SELECT Sno
+    FROM ST.SC
+    WHERE Cno='2'
+);
+
+SELECT Sname, Sage
+FROM ST.Student
+WHERE Sage < ANY(
+    SELECT Sage 
+    FROM ST.Student
+    WHERE Sdept='CS'
+)
+AND Sdept != 'CS';
+
+SELECT S.Sno
+FROM 
