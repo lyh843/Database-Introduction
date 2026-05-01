@@ -9,87 +9,110 @@ USE phonemon;
 -- BEGIN Q1
 SELECT COUNT(*) speciesCount
 FROM species
-WHERE LOWER(description) LIKE "%this%";
-
-SELECT COUNT(*) speciesCount
-FROM species
-WHERE LOWER(description) REGEXP '(^|[^a-z])this([^a-z]|$)';
+WHERE description LIKE "%this%";
 -- END Q1
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q2
-SELECT username, SUM(power) totalPhonemonPower
-FROM player, phonemon
-WHERE (username='Cook' OR username='Hughes') AND phonemon.player = player.id
-GROUP BY username;
+SELECT player.username username, SUM(phonemon.power) totalPhonemonPower
+FROM player
+JOIN phonemon ON phonemon.player=player.id
+where (player.username="Cook" OR player.username="Hughes")
+GROUP BY player.id;
 -- END Q2
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q3
-SELECT title, Count(player.id) numberOfPlayers
-FROM team, player
-WHERE team.id = player.team
-GROUP BY team.title
-ORDER BY Count(player.id) DESC;
+SELECT team.title title, COUNT(*) numberOfPlayers
+FROM team
+JOIN player ON player.team = team.id
+GROUP BY team.id;
 -- END Q3
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q4
 SELECT species.id idSpecies, species.title title
 FROM species, type
-WHERE type.title = 'Grass' AND (type.id = species.type1 OR type.id = species.type2);
+where type.title = "grass" AND (species.type1 = type.id OR species.type2 = type.id);
 -- END Q4
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q5
-SELECT P1.id idPlayer, P1.username username
-FROM player P1
+SELECT player.id idPlayer, player.username username
+FROM player
 where NOT EXISTS(
-    SELECT P1.id
-    FROM purchase, item
-    WHERE purchase.item = item.id AND item.type = 'F' AND purchase.player = P1.id
+    SELECT *
+    FROM purchase
+    JOIN item ON purchase.item = item.id
+    WHERE item.type='F' AND purchase.player = player.id
 );
 -- END Q5
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q6
-SELECT player.level level, SUM(item.price * purchase.quantity) totalAmountSpentByAllPlayersAtLevel
+SELECT player.level level, SUM(item.price * purchase.quantity)totalAmountSpentByAllPlayersAtLevel
 FROM player
-JOIN purchase ON player.id = purchase.player
-JOIN item ON purchase.item = item.id
+JOIN purchase ON purchase.player = player.id
+JOIN item ON item.id = purchase.item
 GROUP BY player.level
 ORDER BY totalAmountSpentByAllPlayersAtLevel DESC;
 -- END Q6
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q7
-SELECT item.id item, item.title title, Count(*) numTimesPurchased
+SELECT item.id item, item.title title, COUNT(*) numTimesPurchased
 FROM purchase
 JOIN item ON purchase.item = item.id
-GROUP BY item.id, item.title
-HAVING COUNT(*) = (
+GROUP BY item.id
+HAVING COUNT(*)=(
     SELECT MAX(cnt)
     FROM (
-        SELECT COUNT(*) AS cnt
+        SELECT COUNT(*) cnt
         FROM purchase
-        GROUP BY item
+        GROUP BY purchase.item
     ) temp
 );
 -- END Q7
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q8
-SELECT player.id playerID, player.username username, numberDistinctFoodItemsPurchased
+SELECT player.id playerID, player.username username, COUNT(DISTINCT food.id) numberDistinctFoodItemsPurchased
 FROM player
-JOIN purchase
+JOIN purchase ON purchase.player = player.id
+JOIN food ON food.id = purchase.item
+GROUP by player.id, player.username
+HAVING COUNT(DISTINCT food.id) = (
+    SELECT COUNT(*)
+    FROM food
+);
 -- END Q8
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q9
-SELECT numberOfPhonemonPairs, distanceX
-
+SELECT COUNT(*) numberOfPhonemonPairs, MIN(
+    ROUND(
+        SQRT(
+            (p1.latitude - p2.latitude) * (p1.latitude - p2.latitude) + 
+            (p1.longitude - p2.longitude) * (p1.longitude - p2.longitude)
+        ) * 100, 2
+    )
+) distanceX
+FROM phonemon p1
+JOIN phonemon p2 ON p2.id > p1.id;
 -- END Q9
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q10
-
+SELECT DISTINCT player.username username, type.title typeTitle
+FROM player
+JOIN type
+where NOT EXISTS (
+    SELECT *
+    FROM species
+    where (species.type1 = type.id OR species.type2 = type.id) AND
+        NOT EXISTS (
+            SELECT *
+            FROM phonemon
+            where phonemon.player = player.id AND phonemon.species = species.id
+        )
+);
 -- END Q10
