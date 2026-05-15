@@ -25,7 +25,8 @@ GROUP BY player.id;
 SELECT team.title title, COUNT(*) numberOfPlayers
 FROM team
 JOIN player ON player.team = team.id
-GROUP BY team.id;
+GROUP BY team.id
+ORDER BY numberOfPlayers DESC;
 -- END Q3
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
@@ -88,31 +89,41 @@ HAVING COUNT(DISTINCT food.id) = (
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q9
-SELECT COUNT(*) numberOfPhonemonPairs, MIN(
-    ROUND(
-        SQRT(
-            (p1.latitude - p2.latitude) * (p1.latitude - p2.latitude) + 
-            (p1.longitude - p2.longitude) * (p1.longitude - p2.longitude)
-        ) * 100, 2
-    )
+SELECT COUNT(*) numberOfPhonemonPairs, ROUND(
+    SQRT(
+        (p1.latitude - p2.latitude) * (p1.latitude - p2.latitude) + 
+        (p1.longitude - p2.longitude) * (p1.longitude - p2.longitude)
+    ) * 100, 2
 ) distanceX
 FROM phonemon p1
-JOIN phonemon p2 ON p2.id > p1.id;
+JOIN phonemon p2 ON p2.id > p1.id
+GROUP BY distanceX
+HAVING distanceX = (
+    SELECT MIN(
+        ROUND(
+            SQRT(
+                (p3.latitude - p4.latitude) * (p3.latitude - p4.latitude) + 
+                (p3.longitude - p4.longitude) * (p3.longitude - p4.longitude)
+            ) * 100, 2
+        )
+    )
+    FROM phonemon p3
+    JOIN phonemon p4 ON p3.id > p4.id
+);
 -- END Q9
 
 -- ____________________________________________________________________________________________________________________________________________________________________________________________________________
 -- BEGIN Q10
-SELECT DISTINCT player.username username, type.title typeTitle
+SELECT player.username username, type.title typeTitle
 FROM player
 JOIN type
-where NOT EXISTS (
+WHERE NOT EXISTS(
     SELECT *
     FROM species
-    where (species.type1 = type.id OR species.type2 = type.id) AND
-        NOT EXISTS (
-            SELECT *
-            FROM phonemon
-            where phonemon.player = player.id AND phonemon.species = species.id
-        )
+    WHERE (species.type1 = type.id OR species.type2 = type.id) AND NOT EXISTS(
+        SELECT *
+        FROM phonemon
+        where phonemon.species = species.id AND phonemon.player = player.id
+    )
 );
 -- END Q10
