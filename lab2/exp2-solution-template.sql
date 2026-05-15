@@ -11,7 +11,7 @@ USE OrderDB;
 DROP PROCEDURE IF EXISTS info_product;
 
 CREATE PROCEDURE info_product (IN product_name VARCHAR(40))
-    SELECT Customer.customerNo, Customer.customerName, OrderDetail.orderNo, OrderDetail.quantity, OrderDetail.price
+    SELECT Customer.customerNo, Customer.customerName, OrderDetail.orderNo, OrderDetail.quantity, (OrderDetail.price * OrderDetail.quantity)
     FROM OrderDetail
     JOIN Product ON OrderDetail.productNo = Product.productNo
     JOIN OrderMaster ON OrderMaster.orderNo = OrderDetail.orderNo
@@ -51,7 +51,7 @@ CREATE FUNCTION average_price(product_name VARCHAR(40))
 RETURNS FLOAT
 READS SQL DATA
 RETURN (
-    SELECT AVG(OrderDetail.price)
+    SELECT SUM(quantity * price) / SUM(quantity)
     FROM OrderDetail
     JOIN Product ON Product.productNo = OrderDetail.productNo
     WHERE Product.productName = product_name

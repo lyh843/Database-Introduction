@@ -35,6 +35,20 @@
       "name": "vscode",
       "database": "ST",
       "username": "lyh"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "gamebook_vscode",
+      "database": "ST",
+      "username": "root"
     }
   ]
 }
