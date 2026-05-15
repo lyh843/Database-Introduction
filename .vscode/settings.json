@@ -32,10 +32,9 @@
       "server": "localhost",
       "port": 3306,
       "driver": "MySQL",
-      "name": "local-mysql",
+      "name": "vscode",
       "database": "ST",
-      "username": "root",
-      "askForPassword": true
+      "username": "lyh"
     }
   ]
 }
