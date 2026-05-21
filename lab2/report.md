@@ -179,7 +179,267 @@ DROP TRIGGER IF EXISTS add_salary;
 
 ---
 
+### T4
 
+**实验代码：**
+
+```sql
+#include <stdio.h>
+#include <stdlib.h>
+#include <mysql.h>
+
+int main(void){
+    MYSQL *conn;
+    MYSQL_RES *result;
+    MYSQL_ROW row;
+
+    // MySQL 连接参数，对应本机上的 OrderDB 数据库。
+    const char *host = "127.0.0.1";
+    const char *user = "lyh";
+    const char *password = "123456";
+    const char *database = "OrderDB";
+    const unsigned int port = 3306;
+
+    conn = mysql_init(NULL);
+    mysql_real_connect(conn, host, user, password, database, port, NULL, 0);
+
+    // 查询工资最高的 20 名员工。
+    const char* sql1 = 
+            "SELECT employeeNo, employeeName, salary "
+            "FROM Employee "
+            "ORDER BY salary DESC "
+            "LIMIT 20";
+        
+    mysql_query(conn, sql1);
+    result = mysql_store_result(conn);
+
+    printf("%-10s %-10s %-10s\n", "employeeNo", "employeeName", "salary");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL",
+            row[2] ? row[2] : "NULL"
+        );
+    }
+
+    // 插入一条客户记录，并再次查询该客户检查插入结果。
+    const char* sql2 = 
+            "INSERT INTO Customer "
+            "VALUES ('C20080002', '泰康股份有限公司', '010-5422685', '天津市', '220501')";
+    
+    const char* sql2_test = 
+            "SELECT * "
+            "FROM Customer "
+            "WHERE customerNo = 'C20080002'";
+
+    mysql_query(conn, sql2);
+    mysql_query(conn, sql2_test);
+    result = mysql_store_result(conn);
+
+    printf("%-10s %-10s %-10s %-10s %-10s\n", "customerNo", "customerName", "telephone", "address", "zip");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s %-10s %-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL",
+            row[2] ? row[2] : "NULL",
+            row[3] ? row[3] : "NULL",
+            row[4] ? row[4] : "NULL"
+        );
+    }
+
+    // 删除工资大于 5000 的员工，删除前后各打印一次便于对比。
+    const char* sql3 =
+            "DELETE FROM Employee "
+            "WHERE salary > 5000";
+
+    const char* sql3_test = 
+            "SELECT employeeName, salary "
+            "FROM Employee";
+
+    mysql_query(conn, sql3_test);
+    result = mysql_store_result(conn);
+
+    printf("%-10s %-10s\n", "employeeName", "salary");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL"
+        );
+    }
+
+    mysql_query(conn, sql3);
+    
+    mysql_query(conn, sql3_test);
+    result = mysql_store_result(conn);
+
+    printf("%-10s %-10s\n", "employeeName", "salary");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL"
+        );
+    }
+    
+
+    // 将价格大于 1000 的产品打五折，更新前后各打印一次便于对比。
+    const char* sql4 =
+            "UPDATE Product "
+            "SET productPrice = productPrice * 0.5 "
+            "WHERE productPrice > 1000";
+    
+    const char* sql4_test = 
+            "SELECT productName, productPrice "
+            "FROM Product";
+
+    mysql_query(conn, sql4_test);
+    result = mysql_store_result(conn);
+
+    printf("%-10s %-10s\n", "productName", "productPrice");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL"
+        );
+    }
+    mysql_query(conn, sql4);
+    mysql_query(conn, sql4_test);
+    result = mysql_store_result(conn);
+
+    printf("%-10s %-10s\n", "productName", "productPrice");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL"
+        );
+    }
+}
+```
+
+**实验结果：**
+
+其中部分图像中左侧为操作前，右侧为操作后
+
+![image-20260521202844781](t4_1.png)
+
+![image-20260521203223534](t4_2.png)
+
+<img src="t4_3.jpg" style="zoom: 15%;" />
+
+<img src="t4_4.jpg" style="zoom:15%;" />
+
+---
+
+### T5
+
+**代码部分：**
+
+```sql
+#include <stdio.h>
+#include <stdlib.h>
+#include <mysql.h>
+
+void print(MYSQL_RES* result){
+
+}
+
+int main(void){
+    MYSQL *conn;
+    MYSQL_RES *result;
+    MYSQL_ROW row;
+
+    // MySQL 连接参数，对应本机上的 OrderDB 数据库。
+    const char *host = "127.0.0.1";
+    const char *user = "lyh";
+    const char *password = "123456";
+    const char *database = "OrderDB";
+    const unsigned int port = 3306;
+
+    conn = mysql_init(NULL);
+    mysql_real_connect(conn, host, user, password, database, port, NULL, 0);
+
+    // 从键盘读入部门名，用它拼接后面的更新和查询语句。
+    char str_department[50];
+    char sql1[200];
+    char sql1_test[200];
+    scanf("%49s", str_department);
+
+    // 给指定部门的员工统一加薪 200。
+    snprintf(sql1, sizeof(sql1), 
+            "UPDATE Employee "
+            "SET salary = salary + 200 "
+            "WHERE department = '%s'", str_department);
+
+    // 查询该部门员工工资，用于加薪前后对比。
+    snprintf(sql1_test, sizeof(sql1_test), 
+            "SELECT employeeName, salary "
+            "From Employee "
+            "WHERE department = '%s'", str_department);
+
+    mysql_query(conn, sql1_test);
+    result = mysql_store_result(conn);
+    printf("%-10s %-10s\n", "employeeName", "salary");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL"
+        );
+    }
+    mysql_query(conn, sql1);
+    mysql_query(conn, sql1_test);
+    result = mysql_store_result(conn);
+    printf("%-10s %-10s\n", "employeeName", "salary");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL"
+        );
+    }
+
+    // 查询所有客户的名称、地址和电话。
+    const char* sql2 = 
+            "SELECT customerName, address, telephone "
+            "FROM Customer";
+    
+    mysql_query(conn, sql2);
+    result = mysql_store_result(conn);
+    printf("%-10s %-10s %-10s\n", "customerName", "address", "telephone");
+    printf("--------------------------------------------------------------\n");
+    while ((row = mysql_fetch_row(result)) != NULL) {
+        printf(
+            "%-10s %-10s %-10s\n",
+            row[0] ? row[0] : "NULL",
+            row[1] ? row[1] : "NULL",
+            row[2] ? row[2] : "NULL"
+        );
+    }
+}
+```
+
+**实验结果：**
+
+其中部分图像中左侧为操作前，右侧为操作后
+
+<img src="t5_1.jpg" style="zoom:15%;" />
+
+![image-20260521220331895](t5_2.png)
+
+---
 
 ## 实验中遇到的困难及解决办法
 

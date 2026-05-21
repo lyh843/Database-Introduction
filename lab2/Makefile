@@ -1,6 +1,5 @@
 CC := gcc
-TARGET := exp2-solution
-SRC := exp2-solution.c
+TARGETS := T4 T5
 
 MYSQL_CFLAGS := $(shell mysql_config --cflags 2>/dev/null)
 MYSQL_LIBS := $(shell mysql_config --libs 2>/dev/null)
@@ -18,19 +17,19 @@ ifeq ($(strip $(MYSQL_LIBS)),)
 MYSQL_LIBS := -L/usr/lib/x86_64-linux-gnu -lmysqlclient
 endif
 
-all: check-env $(TARGET)
+all: check-env $(TARGETS)
 
 check-env:
 	@test -f /usr/include/mysql/mysql.h || { echo "MySQL header not found: /usr/include/mysql/mysql.h"; exit 1; }
 	@test -e /usr/lib/x86_64-linux-gnu/libmysqlclient.so || { echo "MySQL client library not found: /usr/lib/x86_64-linux-gnu/libmysqlclient.so"; exit 1; }
 
-$(TARGET): $(SRC)
-	$(CC) $(SRC) -o $(TARGET) $(MYSQL_CFLAGS) $(MYSQL_LIBS)
+T4: T4.c
+	$(CC) T4.c -o T4 $(MYSQL_CFLAGS) $(MYSQL_LIBS)
 
-run: all
-	./$(TARGET)
+T5: T5.c
+	$(CC) T5.c -o T5 $(MYSQL_CFLAGS) $(MYSQL_LIBS)
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGETS)
 
-.PHONY: all check-env run clean
+.PHONY: all check-env clean
