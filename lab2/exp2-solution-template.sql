@@ -131,6 +131,19 @@ BEGIN
     WHERE employeeNo = NEW.employeeNo;
 END;
 
+SELECT employeeName, hireDate, salary
+FROM employee
+WHERE employeeNo = 'E2005001' OR employeeNo = 'E2005005';
+
+INSERT INTO OrderMaster
+VALUES ('123', 'C20050001', 'E2005001', '20260521', 0.00, '1');
+INSERT INTO OrderMaster
+VALUES ('456', 'C20050002', 'E2005005', '20060520', 0.00, '2');
+
+SELECT employeeName, hireDate, salary
+FROM employee
+WHERE employeeNo = 'E2005001' OR employeeNo = 'E2005005';
+
 DROP TRIGGER IF EXISTS add_salary;
 
 -- END Q3.2
