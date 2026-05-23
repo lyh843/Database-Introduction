@@ -32,9 +32,9 @@
       "server": "localhost",
       "port": 3306,
       "driver": "MySQL",
-      "name": "vscode",
+      "name": "gamebook_vscode",
       "database": "ST",
-      "username": "lyh"
+      "username": "root"
     },
     {
       "mysqlOptions": {
@@ -46,9 +46,9 @@
       "server": "localhost",
       "port": 3306,
       "driver": "MySQL",
-      "name": "gamebook_vscode",
-      "database": "ST",
-      "username": "root"
+      "name": "ubuntu",
+      "username": "lyh",
+      "database": "ST"
     }
   ]
 }
